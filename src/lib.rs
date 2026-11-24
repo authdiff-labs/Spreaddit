@@ -42,66 +42,53 @@ pub struct SpredditContract;
 impl SpredditContract {
 
 
-    pub fn vote(env: Env, uri : Bytes, amount: i32, descr: Bytes ) -> State {
+    pub fn vote(env: Env, uri: Bytes, amount: i32, descr: Bytes) -> State {
         let mut state = Self::refr_state(env.clone());
-        
-        //nothing to do 
-        if amount == 0 {
-            return state
-        }
-       
-        //I need to add the vote to the list.
-        
-        //Uri has already been submitted
-        if state.articles.contains_key(uri.clone()) {
 
-            //if new vote count is less than or equal to zero
-            //remove from state
-            if amount.checked_add(
-                    state.articles.get_unchecked(uri.clone()).unwrap().count
-                ).expect("no overflow") <= 0 {
+        if amount == 0 || uri.len() == 0 {
+            return state;
+        }
+
+        if state.articles.contains_key(uri.clone()) {
+            let existing = state.articles.get_unchecked(uri.clone()).unwrap();
+            let next_count = existing.count.checked_add(amount).expect("no overflow");
+
+            if next_count <= 0 {
                 state.articles.remove(uri.clone());
-            //else update state
             } else {
-                state.articles.set(uri.clone(), 
-                    ArticleData { 
-                        uri: uri.clone(), 
-                        count: amount.checked_add(
-                                   state.articles.get_unchecked(uri.clone()).unwrap().count
-                               ).expect("no overflow"), 
-                        descr: state.articles.get_unchecked(uri.clone()).unwrap().descr,
-                        created: state.articles.get_unchecked(uri.clone()).unwrap().created,
-                        updated: get_ledger_timestamp(&env)
-                    }
+                state.articles.set(
+                    uri.clone(),
+                    ArticleData {
+                        uri: uri.clone(),
+                        count: next_count,
+                        descr: existing.descr,
+                        created: existing.created,
+                        updated: get_ledger_timestamp(&env),
+                    },
                 );
             }
 
-            //create event for any subscribers
             if amount > 0 {
-                env.events().publish((UPVOTE,), (uri.clone(),amount,state.clone()) );
+                env.events().publish((UPVOTE,), (uri.clone(), amount, state.clone()));
             } else {
-                env.events().publish((DOWNVOTE,), (uri.clone(),amount,state.clone()) );
+                env.events().publish((DOWNVOTE,), (uri.clone(), amount, state.clone()));
             }
-
-        //New submission
         } else if amount > 0 {
             let tstamp = get_ledger_timestamp(&env);
-            state.articles.set(uri.clone(), 
-                ArticleData { 
-                    uri: uri.clone(), 
+            state.articles.set(
+                uri.clone(),
+                ArticleData {
+                    uri: uri.clone(),
                     count: amount,
-                    descr: descr.clone(),
+                    descr,
                     created: tstamp,
-                    updated: tstamp
-                }
+                    updated: tstamp,
+                },
             );
-            //create event for any subscribers
-            env.events().publish((SUBMIT,), (uri.clone(),amount,state.clone()) );
+            env.events().publish((SUBMIT,), (uri.clone(), amount, state.clone()));
         }
 
-        // Save the data.
         env.storage().set(STATE, &state);
-        // Return the new data to the caller.
         state
     }
 
