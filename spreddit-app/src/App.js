@@ -827,13 +827,13 @@ function App() {
                     {displayedArticles.length > 0 ?
                     <Section style={{textAlign: 'center'}}>
                         {displayedArticles.map( link =>
-                            <div key={link.uri} 
+                            <div key={link.uri}
                                 style={{marginBottom: '20px',
                                         border: '1px solid #cccccc', padding: '10px', textAlign: 'justify'}}>
                                 <div style={{marginBottom: '10px'}}>
-                                    <a href={link.uri} target='_blank'>{link.uri}</a>
+                                    <a href={link.uri} target='_blank' rel="noreferrer">{link.uri}</a>
                                     {link.descr && link.descr.length > 0  ?
-                                    <div>
+                                    <div style={{marginTop:'6px', color:'#333'}}>
                                         {link.descr}
                                     </div> : null }
                                 </div>
