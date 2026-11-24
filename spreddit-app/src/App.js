@@ -473,7 +473,17 @@ function App() {
     }
 
 
-    console.log('soroban state to render: ', sorobanState)
+    const displayedArticles = (sorobanState?.articles || [])
+        .filter((a) => {
+            if (!searchQuery.trim()) return true
+            const q = searchQuery.toLowerCase()
+            return (a.uri || '').toLowerCase().includes(q) || (a.descr || '').toLowerCase().includes(q)
+        })
+        .sort((a, b) => {
+            if (sortBy === 'newest') return (b.created || 0) - (a.created || 0)
+            if (sortBy === 'oldest') return (a.created || 0) - (b.created || 0)
+            return (b.count || 0) - (a.count || 0)
+        })
 
     return (
           <div className="container">
