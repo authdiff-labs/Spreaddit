@@ -719,12 +719,13 @@ function App() {
                                                  alignItems: 'center'}}>
                                         <button type="submit" className="button-lg"
                                             style={{width:'100%'}}
-                                            onClick={()=> setShowInteractOverlay(false) } >
+                                            onClick={()=> { setShowInteractOverlay(false); setInteractError(null); setInteractVote(null); } } >
                                             Cancel
                                         </button>
                                         <div style={{width: '5px'}}></div>
-                                        <button type="submit" className="button-lg" 
+                                        <button type="submit" className="button-lg"
                                             style={{width:'100%'}}
+                                            disabled={!interactVote}
                                             onClick={()=> {
                                                 onVoteSubmit();
                                             }}
