@@ -841,7 +841,7 @@ function App() {
                                 style={{marginBottom: '20px',
                                         border: '1px solid #cccccc', padding: '10px', textAlign: 'justify'}}>
                                 <div style={{marginBottom: '10px'}}>
-                                    <a href={link.uri} target='_blank' rel="noreferrer">{link.uri}</a>
+                                    <a href={link.uri} target="_blank" rel="noreferrer">{link.uri}</a>
                                     {link.descr && link.descr.length > 0  ?
                                     <div style={{marginTop:'6px', color:'#333'}}>
                                         {link.descr}
