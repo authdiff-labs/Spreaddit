@@ -125,9 +125,13 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs:
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Contract API](docs/API.md)
+- [Development Guide](docs/DEVELOPMENT.md)
+- [Roadmap](docs/ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
 
 ## Roadmap
 
