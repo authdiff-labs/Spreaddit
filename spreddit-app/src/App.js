@@ -305,12 +305,10 @@ function App() {
           console.log(Object.keys(xdr.LedgerEntryData.fromXDR(data.xdr, 'base64')))
           console.log("lastModified:", data.lastModifiedLedgerSeq);
           console.log("latestLedger:", data.latestLedger);
-          setLoaded(true)
         }, err => {
             console.log(err)
             setLoadError(err?.message || 'Failed to load contract state')
-            setLoaded(true)
-        });
+          });
 
     }
 
