@@ -167,7 +167,7 @@ var Section = (props) => {
 
     return (
         <div 
-            className={props.class ? props.class : props.className ? props.className : null}
+            className={[props.class ? props.class : props.className ? props.className : null, "spreddit-card"].filter(Boolean).join(" ")}
             style={
             {...{padding: '10px', width: '100%',
                  maxWidth:'380px', marginBottom: '15px', backgroundColor:'white' },
