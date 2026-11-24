@@ -500,7 +500,7 @@ function App() {
                         <img src={logo} style={{maxWidth: '150px'}} />
                         <h4>Spreddit</h4>
                         <p style={{marginBottom: '10px'}}>
-                            A decentralized Reddit clone that uses Stellar's Soroban smart contracts.
+                            A decentralized link board powered by Stellar Soroban smart contracts.
                         </p>
                     </Section>
         
