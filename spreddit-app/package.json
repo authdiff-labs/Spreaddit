@@ -37,5 +37,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "description": "React frontend for Spreaddit, a Soroban-powered decentralized link board.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/authdiff-labs/Spreaddit.git"
   }
 }
