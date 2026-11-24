@@ -774,18 +774,22 @@ function App() {
 
 
                     <Section style={{textAlign: 'center'}}>
-                        <input style={{width: '300px', marginBottom: '5px'}} 
-                               type="text" placeholder="Futurenet wallet secret key" 
-                               value={futurenetKey ? futurenetKey : ''} 
-                               onChange={(e)=>setFuturenetKey(
-                                       e.target.value.length > 0 ? e.target.value : null)}
-
-                        />
+                        <div style={{display:'flex', gap:'8px', justifyContent:'center', alignItems:'center'}}>
+                            <input style={{width: '260px', marginBottom: '5px'}}
+                                   type={showKey ? "text" : "password"} placeholder="Futurenet wallet secret key"
+                                   value={futurenetKey ? futurenetKey : ''}
+                                   onChange={(e)=>setFuturenetKey(
+                                           e.target.value.length > 0 ? e.target.value : null)}
+                            />
+                            <button type="button" className="button-sm" onClick={()=>setShowKey(!showKey)} style={{marginBottom:'5px'}}>
+                                {showKey ? 'Hide' : 'Show'}
+                            </button>
+                        </div>
                         <div style={{fontSize: '0.7em'}}>
                            <a href="https://laboratory.stellar.org/#account-creator?network=futurenet"
-                              target="_blank"
+                              target="_blank" rel="noreferrer"
                            >
-                            Use Stellar Laboratory to create & fund keys 
+                            Use Stellar Laboratory to create & fund keys
                            </a>
                         </div>
                     </Section>
