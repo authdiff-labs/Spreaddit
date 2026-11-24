@@ -340,75 +340,56 @@ function App() {
         }
 
         (async function transactionRunner() {
-
-            // Fee hardcoded for this example.
             const fee = 1000;
             const contract = new SorobanClient.Contract(contractId);
             const account = await server.getAccount(sourcePublicKey);
 
-            // Need to run a simulateTransaction to get the transaction footprint before running
-            // the actual transaction
-            var prepSimTransaction = () => {
-
-                let walletSource = new SorobanClient.Account(account.id, account.sequence)
-                const transaction = new SorobanClient.TransactionBuilder(walletSource, 
+            const prepSimTransaction = () => {
+                const walletSource = new SorobanClient.Account(account.id, account.sequence)
+                return new SorobanClient.TransactionBuilder(walletSource,
                     { fee, networkPassphrase: NETWORK_PASSPHRASE })
-                    .addOperation(
-                        // An operation to call increment on the contract
-                        //contract.call(spredditContractFn,...spredditContractArgs)
-                        contract.call(spredditContractFn,...spredditContractArgs)
-                    )
+                    .addOperation(contract.call(spredditContractFn, ...spredditContractArgs))
                     .setTimeout(SorobanClient.TimeoutInfinite)
                     .build();
-                return transaction
             }
-           
-            //Build the actual transaction that includes a footprint
-            var prepRealTransaction = (simTransaction) => {
-                
-                let walletSource = new SorobanClient.Account(
-                    account.id,`${parseInt(simTransaction.sequence) - 1}`)
-                const transaction = new SorobanClient.TransactionBuilder(walletSource, 
+
+            const prepRealTransaction = (simTransaction, sim) => {
+                const walletSource = new SorobanClient.Account(
+                    account.id, `${parseInt(simTransaction.sequence) - 1}`)
+                return new SorobanClient.TransactionBuilder(walletSource,
                     { fee, networkPassphrase: NETWORK_PASSPHRASE })
                     .addOperation(
-                        // An operation to call increment on the contract
-                        //contract.call(spredditContractFn,...spredditContractArgs)
                         SorobanClient.Operation.invokeHostFunction({
                             function: simTransaction.operations[0].function,
                             parameters: simTransaction.operations[0].parameters,
-                            footprint: SorobanClient.xdr.LedgerFootprint.fromXDR(
-                                            sim.footprint, 'base64'),
+                            footprint: SorobanClient.xdr.LedgerFootprint.fromXDR(sim.footprint, 'base64'),
                         })
                     )
                     .setTimeout(SorobanClient.TimeoutInfinite)
                     .build();
-                return transaction
             }
 
-            //get the simulated transaction footprint
-            var sim_transaction = prepSimTransaction()
-            let sim = await server.simulateTransaction(sim_transaction)
+            const simTransaction = prepSimTransaction()
+            const sim = await server.simulateTransaction(simTransaction)
+            if (sim.error) {
+                onError({ error: sim.error })
+                return
+            }
 
-            //prepare the real transaction with the footprint
-            const transaction = prepRealTransaction(sim_transaction)
-            // sign the transaction
+            const transaction = prepRealTransaction(simTransaction, sim)
             transaction.sign(SorobanClient.Keypair.fromSecret(sourceSecretKey));
-            console.log(transaction.toXDR())
-            
+
             try {
                 const transactionResult = await server.sendTransaction(transaction);
-                console.log('got a transactionResult')
-                console.log(transactionResult);
-                onSuccess(transactionResult) 
+                onSuccess(transactionResult)
             } catch (err) {
-                onError({'error': 'operation failed'})
                 console.error(err);
+                onError({ error: err?.message || 'operation failed' })
             }
-        })().then( (value) => console.log(value)  ).catch(e => {
-            console.log(e); 
-            onError({'error':'operation failed'});
+        })().catch(e => {
+            console.error(e);
+            onError({ error: e?.message || 'operation failed' });
         })
-
 
     }
 
