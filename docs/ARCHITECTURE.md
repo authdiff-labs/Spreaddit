@@ -36,6 +36,12 @@ Spreaddit is a decentralized Reddit-style link board built on Stellar Soroban.
 4. App builds/simulates/submits Soroban transaction.
 5. UI refreshes to reflect updated state.
 
+## Additional Docs
+
+- [Contract API](API.md)
+- [Development Guide](DEVELOPMENT.md)
+- [Roadmap](ROADMAP.md)
+
 ## Known Limitations
 
 - No on-chain asset transfer for vote payments yet.
