@@ -1,73 +1,147 @@
-# Spreddit
-A blockchain-based Reddit clone using Stellar Soroban
+# Spreaddit
 
+A decentralized, Reddit-style link board built with **Stellar Soroban** smart contracts and a **React** frontend.
 
-## Inspiration
-I wanted to explore how we might use Soroban for DAO-like structures in our SCF Geo-bounties project. So this project is mainly a learning experience. 
+Spreaddit lets users submit links, add short descriptions, and vote links up or down. Contract state is stored on Soroban, while the frontend provides a lightweight interface for reading and updating that state through Soroban RPC.
 
-The inspiration for a Soroban-based Reddit was based on hearing Alexis Ohanian (Reddit founder) talk at Meridian.
+## Features
 
+- **On-chain link board**: Article URIs, descriptions, scores, and timestamps stored in Soroban contract state.
+- **Upvote/downvote flow**: Vote on existing links or seed new submissions with an initial score.
+- **Search and sorting**: Filter links by keyword and sort by top, newest, or oldest.
+- **Configurable RPC**: Point the UI at a custom Soroban RPC endpoint.
+- **Feed status visibility**: Result counts, timestamps, and load-error feedback in the UI.
+- **Contract helpers**: Query a single article or total article count from the contract.
 
-## What it does
-Spreddit's Dapp runs on Stellar Futurenet, and voters spend XLM to upvote/downvote/post links. 
+## Project Structure
 
-*TODO: I couldn't figure out how to use the Stellar Asset Contract to transfer XLM in time for the hackathon. I'd like to add this once I know how to do it.*
+```text
+.
+├── src/                    # Soroban smart contract (Rust)
+│   ├── lib.rs
+│   └── test.rs
+├── spreddit-app/           # React frontend
+│   ├── public/
+│   └── src/
+├── docs/                   # Project documentation
+├── .github/workflows/      # CI workflow
+├── Cargo.toml
+└── README.md
+```
 
-## How we built it
-Spreddit state is stored in a Soroban smart contract, while a React client uses [js-soroban-client](https://github.com/stellar/js-soroban-client) to give a UI for users to interact with the smart contract.
+## Tech Stack
 
+- **Smart Contract**: Rust, Soroban SDK
+- **Frontend**: React, Create React App, soroban-client
+- **Tooling**: Cargo, npm, GitHub Actions
 
-## How to run it
-To run your own Soroban RPC node, use the below Docker command and point the Spreddit UI to `http://localhost:8000/soroban/rpc`
+## Getting Started
 
-    docker run --rm -it   -p 8000:8000   --name stellar   stellar/quickstart:soroban-dev   --futurenet   --enable-soroban-rpc
+### Prerequisites
 
-To start the spreddit Node server to run the UI, from the project root run
+- Rust toolchain (`rustup`, `cargo`)
+- Node.js 20+ and npm
+- (Optional) Soroban CLI and local Soroban RPC for contract deployment/testing
 
-    cd spreddit-app
-    npm install
-    npm start
+### 1) Clone the repository
 
-and then go to `http://localhost:3000` in your browser
+```bash
+git clone https://github.com/authdiff-labs/Spreaddit.git
+cd Spreaddit
+```
 
-If you want to trial Soroban functions on the futurenet contract, use the below Soroban CLI commands
+### 2) Run the frontend
 
-    soroban invoke     --id 3d86cd584daedcf04c37ea5546a6689637b1fd75bd8bd3f89cbc61bbd37d9302    --secret-key <Futurenet secret key> --rpc-url http://localhost:8000/soroban/rpc     --network-passphrase 'Test SDF Future Network ; October 2022'     --fn vote --arg "[104, 116, 116, 112, 115, 58, 47, 47, 115, 121, 110, 99, 101, 100, 46, 116, 111]" --arg 56 --arg "[]"
+```bash
+cd spreddit-app
+npm install
+npm start
+```
 
-    soroban invoke     --id 3d86cd584daedcf04c37ea5546a6689637b1fd75bd8bd3f89cbc61bbd37d9302     --secret-key <Futurenet secret key>     --rpc-url http://localhost:8000/soroban/rpc     --network-passphrase 'Test SDF Future Network ; October 2022'     --fn refr_state
+Open `http://localhost:3000`.
 
+### 3) Configure environment (optional)
 
-## Challenges we ran into
-I wanted to use XLM as the base asset for simplicity. Users would spend XLM to vote. But I couldn't figure out how to use 
-the Stellar Asset Contract in time. An example of how to use this would be really helpful!
+Create `spreddit-app/.env` from `spreddit-app/.env.example`:
 
-I couldn't find any docs on parsing the contract data ledger entry in JS, I suspect there's functionality in SorobanClient.xdr, but I ended up writing something rough myself. Similarly there's no docs on how to prep arguments to send to smart contracts via Soroban JS client. I found some stuff in the example dapp, but it was not easy to digest.
+```bash
+REACT_APP_SOROBAN_RPC_URL=https://futurenet.sorobandev.com/soroban/rpc
+REACT_APP_SPREADDIT_CONTRACT_ID=3d86cd584daedcf04c37ea5546a6689637b1fd75bd8bd3f89cbc61bbd37d9302
+REACT_APP_NETWORK_PASSPHRASE=Test SDF Future Network ; October 2022
+```
 
-Related to the above, was figuring out how to add a footprint to the JS calls. I wouldn't have figured this out without the help of the [Soroban Pixelwar dev](https://github.com/candela-network/soroban-pixelwar) - many thanks!
+## Smart Contract
 
-It would be great to have a way for a smart contract to be executed periodically, either by itself or by another looper smart contract. At the moment refreshing Spreddit vote state would need to be done off-chain e.g. by a cron job invoking the contract function. For Spreddit, this would be great for a decay function that decays the vote counts over time.  
+### Contract API
 
-Info on floats would be nice (though I understand using floats on blockchain might be a challenge). I saw in the example dapp they use bigNumber to encode. But not sure how it works on the smart contract side. I'd like to write up an example on how to do this in the future actually.
+- `vote(uri: Bytes, amount: i32, descr: Bytes) -> State`
+  - Submits a new article when unseen and `amount > 0`
+  - Updates score for existing articles
+  - Removes article when score becomes `<= 0`
+  - Emits `SUBMIT`, `UPVOTE`, or `DOWNVOTE` events
+- `refr_state() -> State` – returns current contract state
+- `get_article(uri: Bytes) -> Option<ArticleData>` – returns a single article
+- `article_count() -> u32` – returns number of tracked articles
 
+### Local contract checks
 
-## Accomplishments that we're proud of
-Creating an end-to-end example of a simple DAO-like structure using Soroban, from the smart contract through to the UI for interaction with it. 
+```bash
+cargo check
+cargo test
+```
 
+> Note: This repository currently pins legacy Soroban dependencies from the original prototype. Some environments may require dependency updates or compatible toolchains to build/test successfully.
 
-## What we learned
-How to use Soroban smart contracts end-to-end.
+## Frontend Usage
 
+1. Set a Soroban RPC endpoint (or use default).
+2. Enter a Futurenet secret key (for write actions).
+3. Post a link with an initial vote amount and description.
+4. Vote on links from the feed.
+5. Use search/sort controls to navigate content.
 
-## What's next for Spreddit
-In the short term I'd like to figure out the Stellar Asset Contract to interact with the traditional Stellar assets (XLM), and actually have the voting XLM be transferred. I'd also like to build in a decay function so links gradually lose votes over time.
+## Development
 
-I'm looking to integrate ideas from Spreddit into the geo-dashboards and bounties component of our existing SCF Project - eventually to have a DAO-like structure for community management of a local area. For Spreddit itself - if anyone fancies building on top of it, they should go for it!
+### Useful commands
 
+```bash
+# Contract
+cargo check
+cargo test
 
+# Frontend
+cd spreddit-app
+npm install
+npm start
+npm run build
+```
 
+### CI
 
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs:
+- Rust `cargo check`
+- Frontend `npm ci` and build in `spreddit-app`
 
+## Documentation
 
+- [Architecture](docs/ARCHITECTURE.md)
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
 
+## Roadmap
 
+- [ ] Integrate Stellar Asset Contract / token transfer flow for paid voting
+- [ ] Migrate to current Soroban SDK and soroban-client versions
+- [ ] Add event-based feed updates instead of polling
+- [ ] Add wallet integration (Freighter or similar) instead of manual secret key input
+- [ ] Improve test coverage and add end-to-end UI tests
+- [ ] Add deployment scripts and environment-specific config
 
+## Security
+
+Please do not report vulnerabilities in public issues. See [SECURITY.md](SECURITY.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
