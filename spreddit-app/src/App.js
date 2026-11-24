@@ -844,10 +844,10 @@ function App() {
                                             </span>
                                         { ' ) ' } 
                                     </div>
-                                    {tstampRelativeHumanize(link.created) ? 
-                                    <div style={{fontStyle: 'italic'}}>
-                                        {tstampRelativeHumanize(link.created)}
-                                    </div> : null }
+                                    <div style={{fontStyle: 'italic', fontSize:'0.85em', textAlign:'right'}}>
+                                        {tstampRelativeHumanize(link.created) ? <div>Created {tstampRelativeHumanize(link.created)}</div> : null}
+                                        {tstampRelativeHumanize(link.updated) ? <div>Updated {tstampRelativeHumanize(link.updated)}</div> : null}
+                                    </div>
                                     <div>
                                         <FaRegThumbsUp style={{
                                             fontSize: '1.2em', marginRight: '20px', 
