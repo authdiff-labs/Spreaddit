@@ -511,12 +511,16 @@ function App() {
                             <Section style={{marginBottom: '10px'}}>
                                 <div style={{textAlign: 'center', marginTop: '80px'}}>
                                     <h5>Set Soroban RPC server</h5>
-                                    <input style={{width: '100%', marginBottom: '5px'}} 
+                                    <label style={{display:'block', textAlign:'left', fontWeight:'normal'}}>RPC URL</label>
+                                    <input style={{width: '100%', marginBottom: '5px'}}
                                            type="text" placeholder={DEFAULT_SOROBAN_PATH}
-                                           value={sorobanPathInput ? sorobanPathInput : ''} 
+                                           value={sorobanPathInput ? sorobanPathInput : ''}
                                            onChange={(e)=>setSorobanPathInput(
                                                    e.target.value.length > 0 ? e.target.value : null)}
                                     />
+                                    <div style={{fontSize:'0.75em', color:'#666', textAlign:'left', marginBottom:'10px'}}>
+                                        Use a Soroban RPC endpoint compatible with your deployed contract.
+                                    </div>
                                     <div style={{display: 'flex', 
                                                  flexDirection: 'row',
                                                  alignItems: 'center',
