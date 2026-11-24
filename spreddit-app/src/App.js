@@ -825,6 +825,13 @@ function App() {
                         </div>
                     </Section>
 
+                    {displayedArticles.length === 0 ?
+                    <Section style={{textAlign: 'center'}}>
+                        <p style={{marginBottom:0, color:'#666'}}>
+                            {sorobanState?.articles?.length ? 'No links match your search.' : 'No links posted yet. Be the first to post one.'}
+                        </p>
+                    </Section> : null}
+
                     {displayedArticles.length > 0 ?
                     <Section style={{textAlign: 'center'}}>
                         {displayedArticles.map( link =>
