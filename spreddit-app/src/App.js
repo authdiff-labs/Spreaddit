@@ -34,10 +34,7 @@ var bytesToStr = (bytesArr) => {
         return str
 }
 
-var strToBytes = (str) => {
-    let bytes2 = new TextEncoder().encode(str);
-    return bytes2
-}
+var strToBytes = (str) => new TextEncoder().encode(str);
 
 var isValidHttpUrl = (string) => {
   let url;
