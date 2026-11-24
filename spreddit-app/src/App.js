@@ -818,9 +818,9 @@ function App() {
                     </Section>
 
 
-                    {sorobanState != null && sorobanState.articles.length > 0 ? 
+                    {displayedArticles.length > 0 ?
                     <Section style={{textAlign: 'center'}}>
-                        {sorobanState.articles.map( link =>
+                        {displayedArticles.map( link =>
                             <div key={link.uri} 
                                 style={{marginBottom: '20px',
                                         border: '1px solid #cccccc', padding: '10px', textAlign: 'justify'}}>
