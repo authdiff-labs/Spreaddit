@@ -828,6 +828,7 @@ function App() {
                         <div style={{fontSize:'0.85em', color:'#555', marginBottom:'10px'}}>
                             Showing {displayedArticles.length} of {sorobanState?.articles?.length || 0} links
                         </div>
+                        {loadError ? <div style={{fontSize:'0.8em', color:'#B93C3F'}}>{loadError}</div> : null}
                     </Section>
 
                     {displayedArticles.length === 0 ?
