@@ -93,12 +93,21 @@ impl SpredditContract {
     }
 
 
+    pub fn get_article(env: Env, uri: Bytes) -> Option<ArticleData> {
+        let state = Self::refr_state(env.clone());
+        state.articles.get(uri).unwrap_or(Ok(None)).unwrap()
+    }
+
+    pub fn article_count(env: Env) -> u32 {
+        Self::refr_state(env).articles.len()
+    }
+
     // Return the current voting state.
     pub fn refr_state(env: Env) -> State {
         env.storage()
             .get(STATE)
-            .unwrap_or_else(|| Ok(State::default(&env))) // If no value set, assume 0.
-            .unwrap() // Panic if the value of COUNTER is not a State.
+            .unwrap_or_else(|| Ok(State::default(&env)))
+            .unwrap()
     }
 }
 
