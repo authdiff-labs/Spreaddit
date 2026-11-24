@@ -221,6 +221,9 @@ function App() {
     var [showPostOverlay, setShowPostOverlay] = useState(false)
     var [showRPCPathOverlay, setShowRPCPathOverlay] = useState(false)
     var [showInteractOverlay, setShowInteractOverlay] = useState(false)
+    var [showKey, setShowKey] = useState(false)
+    var [searchQuery, setSearchQuery] = useState('')
+    var [sortBy, setSortBy] = useState('top')
 
 
     var [linkUrl, setLinkUrl] = useState(null)
