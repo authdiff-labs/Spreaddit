@@ -431,29 +431,32 @@ function App() {
             setPostLinkError({'error': 'invalid url'})
             return
         }
-        if (!Number.parseFloat(linkFunds) || Number.parseFloat(linkFunds) <= 0){
+        if (!Number.isFinite(Number(linkFunds)) || Number(linkFunds) <= 0){
             setPostLinkError({'error': 'invalid fund amount'})
             return
         }
 
-        var descr = description ? description : ''
-        setPostLinkPending(true);  
-        setPostLinkError(null); 
-        setSpredditSorobanState('vote', 
+        var descr = description ? description.trim() : ''
+        setPostLinkPending(true);
+        setPostLinkError(null);
+        setSpredditSorobanState('vote',
             [SorobanClient.xdr.ScVal.scvObject(
-                SorobanClient.xdr.ScObject.scoBytes(strToBytes(linkUrl))
+                SorobanClient.xdr.ScObject.scoBytes(strToBytes(linkUrl.trim()))
              ),
-             SorobanClient.xdr.ScVal.scvI32(Math.floor(linkFunds)),
+             SorobanClient.xdr.ScVal.scvI32(Math.floor(Number(linkFunds))),
              SorobanClient.xdr.ScVal.scvObject(
-                SorobanClient.xdr.ScObject.scoBytes(strToBytes(description))
+                SorobanClient.xdr.ScObject.scoBytes(strToBytes(descr))
              )
             ],
             () => {
                 setPostLinkPending(false);
                 setPostLinkError(null);
-                setShowPostOverlay(false); 
+                setShowPostOverlay(false);
+                setLinkUrl(null);
+                setLinkFunds(null);
+                setDescription(null);
             },
-            (err) => setPostLinkError(err)
+            (err) => { setPostLinkPending(false); setPostLinkError(err); }
         )
     }
 
