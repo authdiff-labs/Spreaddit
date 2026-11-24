@@ -460,11 +460,11 @@ function App() {
     //handle user Post submission
     var onVoteSubmit = () => {
         if (!isValidHttpUrl(interactUrl)){
-            setPostLinkError({'error': 'invalid url'})
+            setInteractError({'error': 'invalid url'})
             return
         }
         if (![-1000,-100,-10,10,100,1000].includes(interactVote)){
-            setPostLinkError({'error': 'invalid vote amount'})
+            setInteractError({'error': 'invalid vote amount'})
             return
         }
         setInteractPending(true);  
@@ -475,12 +475,13 @@ function App() {
              ),
              SorobanClient.xdr.ScVal.scvI32(Math.floor(interactVote)), 
              SorobanClient.xdr.ScVal.scvObject(
-                SorobanClient.xdr.ScObject.scoBytes(strToBytes(description))
+                SorobanClient.xdr.ScObject.scoBytes('')
              )
             ],
             () => {
                 setInteractPending(false);
                 setInteractError(null);
+                setInteractVote(null);
                 setShowInteractOverlay(false); 
             },
             (err) => setInteractError(err)
