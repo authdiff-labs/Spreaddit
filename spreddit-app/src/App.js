@@ -796,7 +796,21 @@ function App() {
         
 
                     <Section style={{textAlign: 'center'}}>
-                        <button type="submit" className="button-lg" 
+                        <div style={{display:'flex', gap:'8px', justifyContent:'center', marginBottom:'10px', flexWrap:'wrap'}}>
+                            <input
+                                style={{width:'220px', marginBottom:0}}
+                                type="text"
+                                placeholder="Search links or descriptions"
+                                value={searchQuery}
+                                onChange={(e)=>setSearchQuery(e.target.value)}
+                            />
+                            <select value={sortBy} onChange={(e)=>setSortBy(e.target.value)} style={{marginBottom:0}}>
+                                <option value="top">Top</option>
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
+                        </div>
+                        <button type="submit" className="button-lg"
                             onClick={(e) => {e.preventDefault(); setShowPostOverlay(true); }}
                         >
                             Post new link
