@@ -494,7 +494,7 @@ function App() {
               <Panel>
 
                     <Section style={{textAlign: 'center'}}>
-                        <img src={logo} style={{maxWidth: '150px'}} />
+                        <img src={logo} alt="Spreaddit logo" style={{maxWidth: '150px'}} />
                         <h4>Spreddit</h4>
                         <p style={{marginBottom: '10px'}}>
                             A decentralized link board powered by Stellar Soroban smart contracts.
@@ -550,7 +550,7 @@ function App() {
 
                                 {postLinkPending ? 
                                 <div style={{textAlign: 'center', marginTop: '80px'}}>
-                                    <img src={loading} style={{maxWidth: '150px'}} />
+                                    <img src={loading} alt="Loading" style={{maxWidth: '150px'}} />
                                     {postLinkError ?
                                         <div style={{margin: '30px'}}>
                                             <p style={{color:'#B93C3F'}}>{postLinkError.error}</p>
@@ -645,7 +645,7 @@ function App() {
 
                                 {interactPending ? 
                                 <div style={{textAlign: 'center', marginTop: '80px'}}>
-                                    <img src={loading} style={{maxWidth: '150px'}} />
+                                    <img src={loading} alt="Loading" style={{maxWidth: '150px'}} />
                                     {interactError ?
                                         <div style={{margin: '30px'}}>
                                             <p style={{color:'#B93C3F'}}>{interactError.error}</p>
