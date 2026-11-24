@@ -818,6 +818,12 @@ function App() {
                     </Section>
 
 
+                    <Section style={{textAlign: 'center'}}>
+                        <div style={{fontSize:'0.85em', color:'#555', marginBottom:'10px'}}>
+                            Showing {displayedArticles.length} of {sorobanState?.articles?.length || 0} links
+                        </div>
+                    </Section>
+
                     {displayedArticles.length > 0 ?
                     <Section style={{textAlign: 'center'}}>
                         {displayedArticles.map( link =>
