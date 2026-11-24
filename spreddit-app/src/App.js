@@ -212,9 +212,9 @@ function App() {
 
 
     var [sorobanPath, setSorobanPath] = 
-            useState('https://futurenet.sorobandev.com/soroban/rpc')
+            useState(DEFAULT_SOROBAN_PATH)
     var [sorobanPathInput, setSorobanPathInput] = 
-            useState('https://futurenet.sorobandev.com/soroban/rpc')
+            useState(DEFAULT_SOROBAN_PATH)
 
     var [futurenetKey, setFuturenetKey] = useState(null)
 
@@ -246,7 +246,7 @@ function App() {
                     sorobanPath ? sorobanPath : DEFAULT_SOROBAN_PATH,SOROBAN_OPTS);
         
         //fetching contract data
-        const contractId = SPREDDIT_CONTRACTID;
+        const contractId = DEFAULT_CONTRACT_ID;
         const key = xdr.LedgerKey.contractData(new xdr.LedgerKeyContractData({
           contractId: Buffer.from(contractId, "hex"),
           key: xdr.ScVal.scvSymbol("STATE"),
@@ -330,7 +330,7 @@ function App() {
         try {
             sourceKeypair = SorobanClient.Keypair.fromSecret(sourceSecretKey);
             sourcePublicKey = sourceKeypair.publicKey();
-            contractId = SPREDDIT_CONTRACTID;
+            contractId = DEFAULT_CONTRACT_ID;
         } catch(err) {
             onError({'error': 'invalid futurenet secret key'})
             return
@@ -349,7 +349,7 @@ function App() {
 
                 let walletSource = new SorobanClient.Account(account.id, account.sequence)
                 const transaction = new SorobanClient.TransactionBuilder(walletSource, 
-                    { fee, networkPassphrase: SorobanClient.Networks.FUTURENET })
+                    { fee, networkPassphrase: NETWORK_PASSPHRASE })
                     .addOperation(
                         // An operation to call increment on the contract
                         //contract.call(spredditContractFn,...spredditContractArgs)
@@ -366,7 +366,7 @@ function App() {
                 let walletSource = new SorobanClient.Account(
                     account.id,`${parseInt(simTransaction.sequence) - 1}`)
                 const transaction = new SorobanClient.TransactionBuilder(walletSource, 
-                    { fee, networkPassphrase: SorobanClient.Networks.FUTURENET })
+                    { fee, networkPassphrase: NETWORK_PASSPHRASE })
                     .addOperation(
                         // An operation to call increment on the contract
                         //contract.call(spredditContractFn,...spredditContractArgs)
