@@ -753,15 +753,10 @@ function App() {
                         <div style={{borderTop: '1px solid #cccccc', borderBottom: '1px solid #cccccc'}}>
                             <div>
                                 <p style={{fontSize: '0.85em', fontStyle: 'italic'}}>
-                                    {'I built this end-to-end Soroban demo to explore '}
-                                    {'how we might create DAO-like structures for  '} 
-                                    <a href="https://communityfund.stellar.org/projects/synced-geo-bounties">
-                                    { 'our SCF project'}
-                                    </a>.
+                                    Spreaddit is a Soroban-powered community link board where users submit and vote on links.
                                 </p>
                                 <p style={{marginBottom: '10px', fontSize: '0.85em', fontStyle: 'italic'}}>
-                                    Spreddit's smart contract runs on Stellar Futurenet, 
-                                    and voters spend XLM to upvote/downvote/post.
+                                    Configure your RPC endpoint and Futurenet key to interact with the contract.
                                 </p>
                             </div>
                             <div style={{fontSize: '0.7em', fontStyle: 'italic'}}>
