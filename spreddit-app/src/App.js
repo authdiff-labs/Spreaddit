@@ -16,9 +16,10 @@ window.Buffer = require('buffer/').Buffer
 
 
 //Global parameters
-const DEFAULT_SOROBAN_PATH = 'http://localhost:8000/soroban/rpc'
-const SOROBAN_OPTS = {allowHttp: true}
-const SPREDDIT_CONTRACTID = "3d86cd584daedcf04c37ea5546a6689637b1fd75bd8bd3f89cbc61bbd37d9302" 
+const DEFAULT_SOROBAN_PATH = process.env.REACT_APP_SOROBAN_RPC_URL || 'https://futurenet.sorobandev.com/soroban/rpc'
+const DEFAULT_CONTRACT_ID = process.env.REACT_APP_SPREADDIT_CONTRACT_ID || "3d86cd584daedcf04c37ea5546a6689637b1fd75bd8bd3f89cbc61bbd37d9302"
+const NETWORK_PASSPHRASE = process.env.REACT_APP_NETWORK_PASSPHRASE || SorobanClient.Networks.FUTURENET
+const SOROBAN_OPTS = { allowHttp: true }
 
 
 
