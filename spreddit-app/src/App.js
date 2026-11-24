@@ -10,7 +10,6 @@ import { useState, useEffect, useRef } from 'react';
 
 //Imports used by Soroban
 var SorobanClient = require('soroban-client');
-console.log(SorobanClient.Networks)
 var xdr = SorobanClient.xdr
 window.Buffer = require('buffer/').Buffer
 
@@ -32,8 +31,7 @@ var bytesToStr = (bytesArr) => {
     // convert bytes to string
     // encoding can be specfied, defaults to utf-8 which is ascii.
     let str = new TextDecoder().decode(bytesView);
-    console.log('bytesToStr',str)
-    return str
+        return str
 }
 
 var strToBytes = (str) => {
@@ -258,16 +256,6 @@ function App() {
 
           var spreddit_state_outer = xdr.LedgerEntryData.fromXDR(data.xdr, 'base64')
 
-          console.log("obj:",
-             xdr.LedgerEntryData.fromXDR(data.xdr, 'base64')
-          );
-          console.log("obj:", 
-              spreddit_state_outer.constructor.name,
-              Object.getOwnPropertyNames(spreddit_state_outer)
-          );
-          console.log("obj_parsed:", 
-              parse_soroban_output(spreddit_state_outer)
-          );
 
           var toSet = null
 
@@ -279,12 +267,9 @@ function App() {
               spreddit_data_parsed.contractData.STATE[0].articles.length > 0 
              ){
 
-              console.log('parsing contract')
-              console.log(spreddit_data_parsed.contractData.STATE[0].articles)
               var test = spreddit_data_parsed.contractData.STATE[0].articles.map(
                             x => x[Object.keys(x)[0]]
                         )
-              console.log(test[0][1])
               toSet = spreddit_data_parsed.contractData.STATE[0].articles.map(
                         x => x[Object.keys(x)[0]]
                       )
@@ -294,16 +279,10 @@ function App() {
                         //x => { return {uri:x[1].uri, count: x[0].count }}
                       )
 
-              console.log('toSet:', toSet)
-              toSet = toSet.sort((a, b) => b.count - a.count )
-              console.log(toSet)
           }
 
           setSorobanState(toSet != null ? {'articles':toSet}  : null)
 
-          console.log(Object.keys(xdr.LedgerEntryData.fromXDR(data.xdr, 'base64')))
-          console.log("lastModified:", data.lastModifiedLedgerSeq);
-          console.log("latestLedger:", data.latestLedger);
         }, err => {
             console.log(err)
             setLoadError(err?.message || 'Failed to load contract state')
