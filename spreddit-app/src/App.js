@@ -207,7 +207,6 @@ var Overlay = (props) => {
 //App entrypoint
 function App() {
 
-    var [loaded, setLoaded] = useState(false)
     var [sorobanState, setSorobanState] = useState(null)
     var [loadError, setLoadError] = useState(null)
 
